@@ -14,6 +14,8 @@ import EnvironmentSelector, { EnvType } from './EnvironmentSelector';
 import SecureInfoPanel from './SecureInfoPanel';
 import SafeBoundary from './xr/SafeBoundary';
 import SessionExitPanel from './xr/SessionExitPanel';
+import SwapTool from './xr/SwapTool';
+import SwapScale from './SwapScale';
 import Button3D, { XR_THEME } from './xr/Button3D';
 import QRPanel3D from './QRPanel3D';
 import ContractClipboard3D from './ContractClipboard3D';
@@ -51,6 +53,9 @@ export default function Scene() {
     // QR & Contract Clipboard State
     const [showQR, setShowQR] = useState(false);
     const [showClipboard, setShowClipboard] = useState(false);
+
+    // Swap scale: a small carried tool, expanded into the full-size scale on demand.
+    const [scaleOpen, setScaleOpen] = useState(false);
 
     const handleConnect = () => {
         // First-run users must set up a vault before there is anything to unlock.
@@ -190,8 +195,24 @@ export default function Scene() {
                 </group>
             )}
 
-            {/* Tokens Layout */}
+            {/* Swap tool (small, always within reach) and the full-size scale it toggles. */}
             {!showPinPad && !showSecureInfo && !selectedToken && !swapOpen && (
+                <SwapTool onActivate={() => setScaleOpen((open) => !open)} />
+            )}
+            {scaleOpen && !showPinPad && !showSecureInfo && !selectedToken && !swapOpen && (
+                <group position={[0, 1.2, -1.6]}>
+                    <SwapScale
+                        onActivate={() => {
+                            setScaleOpen(false);
+                            if (isLocked) handleConnect();
+                            else setSwapFrom('');
+                        }}
+                    />
+                </group>
+            )}
+
+            {/* Tokens Layout */}
+            {!showPinPad && !showSecureInfo && !selectedToken && !swapOpen && !scaleOpen && (
                 <group position={[0, 1.2, 0]}>
                     {tokens.map((token, i) => {
                         const angle = (i - (tokens.length - 1) / 2) * 0.4;
