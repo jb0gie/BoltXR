@@ -14,6 +14,7 @@ import EnvironmentSelector, { EnvType } from './EnvironmentSelector';
 import SecureInfoPanel from './SecureInfoPanel';
 import SafeBoundary from './xr/SafeBoundary';
 import SessionExitPanel from './xr/SessionExitPanel';
+import Button3D, { XR_THEME } from './xr/Button3D';
 import QRPanel3D from './QRPanel3D';
 import ContractClipboard3D from './ContractClipboard3D';
 
@@ -168,6 +169,23 @@ export default function Scene() {
                         title="NEW VAULT SEED"
                         content={secureContent}
                         onClose={() => setShowSecureInfo(false)}
+                    />
+                </group>
+            )}
+
+            {/* First run / locked: one obvious action where the user is already looking.
+                Without a vault there are no coins, so the dashboard alone leaves the
+                middle of the view empty and the next step unclear. */}
+            {!account && !showPinPad && !showSecureInfo && (
+                <group position={[0, 1.3, -1.6]}>
+                    <Button3D
+                        label={isVaultSetup ? 'UNLOCK VAULT' : 'SET UP VAULT'}
+                        onPress={handleConnect}
+                        width={1.2}
+                        height={0.3}
+                        color={XR_THEME.brand}
+                        fontSize={0.1}
+                        pressOnPointerDown
                     />
                 </group>
             )}
