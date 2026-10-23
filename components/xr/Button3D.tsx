@@ -26,6 +26,13 @@ interface Button3DProps {
   color?: string;
   fontSize?: number;
   disabled?: boolean;
+  /**
+   * Fire on pointer down instead of click. An XR ray delivers `click` only when
+   * down and up land on the same object without the pointer travelling; a hand
+   * or controller that drifts mid-press produces hover feedback but never a
+   * click. Use this for controls that must never feel dead (e.g. exit).
+   */
+  pressOnPointerDown?: boolean;
 }
 
 /**
@@ -34,6 +41,7 @@ interface Button3DProps {
  */
 export default function Button3D({
   label, onPress, position = [0, 0, 0], width = 0.8, height = 0.2, color = XR_THEME.neutral, fontSize, disabled = false,
+  pressOnPointerDown = false,
 }: Button3DProps) {
   const [hovered, setHovered] = useState(false);
   const active = hovered && !disabled;
@@ -44,6 +52,12 @@ export default function Button3D({
     <group
       position={position}
       onClick={(e: ThreeEvent<MouseEvent>) => {
+        e.stopPropagation();
+        if (pressOnPointerDown || disabled) return;
+        onPress();
+      }}
+      onPointerDown={(e: ThreeEvent<PointerEvent>) => {
+        if (!pressOnPointerDown) return;
         e.stopPropagation();
         if (!disabled) onPress();
       }}

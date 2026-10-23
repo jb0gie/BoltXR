@@ -119,6 +119,11 @@ export default function WalletXR({ onExit }: { onExit: () => void }) {
                 {!xrSupport.vr && !xrSupport.ar && (
                     <p className="text-[10px] text-red-400 text-center font-medium">WebXR not supported on this device/browser.</p>
                 )}
+                <p className="text-[10px] text-gray-500 leading-relaxed">
+                    Inside AR or VR the browser hides this page. To come back, press the
+                    <span className="text-white font-bold"> EXIT </span>
+                    button floating in front of you — or use your headset&apos;s system menu at any time.
+                </p>
                 {shouldAttemptXrEmulation() && (
                     <p className={`text-[10px] text-center font-bold uppercase tracking-widest ${emulationEnabled ? 'text-amber-300' : 'text-gray-500'}`}>
                         {emulationEnabled ? 'XR Emulation' : 'Native WebXR'}

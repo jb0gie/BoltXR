@@ -14,6 +14,7 @@ import TokenRain from './TokenRain';
 import EnvironmentSelector, { EnvType } from './EnvironmentSelector';
 import SecureInfoPanel from './SecureInfoPanel';
 import SafeBoundary from './xr/SafeBoundary';
+import SessionExitPanel from './xr/SessionExitPanel';
 import QRPanel3D from './QRPanel3D';
 import ContractClipboard3D from './ContractClipboard3D';
 
@@ -244,6 +245,8 @@ export default function Scene() {
                     />
                 </group>
             )}
+            {/* Immersive sessions hide every DOM control, so the way out has to live in-scene. */}
+            <SessionExitPanel />
         </>
     );
 }
