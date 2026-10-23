@@ -12,6 +12,7 @@ interface DashboardProps {
     onConnect: () => void;
     onShowQR?: () => void;
     onShowContracts?: () => void;
+    onSwap?: () => void;
 }
 
 function DashBtn({ label, onClick, position, color }: { label: string; onClick: () => void; position: [number, number, number]; color: string }) {
@@ -38,7 +39,16 @@ function Logo() {
     );
 }
 
-export default function Dashboard({ account, isLocked, isVaultSetup = true, onConnect, onLock, onShowQR, onShowContracts }: DashboardProps) {
+export default function Dashboard({ account, isLocked, isVaultSetup = true, onConnect, onLock, onShowQR, onShowContracts, onSwap }: DashboardProps) {
+    // One action row: every entry point lives in the same predictable strip
+    // instead of scattered around the scene where things can occlude it.
+    const actions = [
+        onShowQR && { label: "RECEIVE QR", onClick: onShowQR, color: "#a855f7" },
+        onSwap && { label: "SWAP", onClick: onSwap, color: "#8b5cf6" },
+        onShowContracts && { label: "CONTRACTS", onClick: onShowContracts, color: "#10b981" },
+        onLock && { label: "LOCK", onClick: onLock, color: "#334155" },
+    ].filter(Boolean) as { label: string; onClick: () => void; color: string }[];
+
     return (
         <group>
             {/* Logo */}
@@ -75,9 +85,15 @@ export default function Dashboard({ account, isLocked, isVaultSetup = true, onCo
                         {account.slice(0, 6)}...{account.slice(-4)}
                     </Text>
                     <group position={[0, -0.55, 0.02]}>
-                        {onShowQR && <DashBtn label="RECEIVE QR" onClick={onShowQR} position={[-0.56, 0, 0]} color="#a855f7" />}
-                        {onShowContracts && <DashBtn label="CONTRACTS" onClick={onShowContracts} position={[0, 0, 0]} color="#10b981" />}
-                        {onLock && <DashBtn label="LOCK" onClick={onLock} position={[0.56, 0, 0]} color="#334155" />}
+                        {actions.map((action, i) => (
+                            <DashBtn
+                                key={action.label}
+                                label={action.label}
+                                onClick={action.onClick}
+                                color={action.color}
+                                position={[(i - (actions.length - 1) / 2) * 0.52, 0, 0]}
+                            />
+                        ))}
                     </group>
                 </>
             ) : (

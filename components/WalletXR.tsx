@@ -119,6 +119,10 @@ export default function WalletXR({ onExit }: { onExit: () => void }) {
                 {!xrSupport.vr && !xrSupport.ar && (
                     <p className="text-[10px] text-red-400 text-center font-medium">WebXR not supported on this device/browser.</p>
                 )}
+                <p className="text-[10px] text-gray-400 leading-relaxed">
+                    <span className="text-white font-bold">Tap a coin</span> to open it — send, swap or copy the
+                    address from there. Receive, swap, contracts and lock are in the header strip.
+                </p>
                 <p className="text-[10px] text-gray-500 leading-relaxed">
                     Inside AR or VR the browser hides this page. To come back, press the
                     <span className="text-white font-bold"> EXIT </span>

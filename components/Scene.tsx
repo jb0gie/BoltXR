@@ -7,7 +7,6 @@ import { errorMessage } from '@/lib/format';
 import Token3D from './Token3D';
 import Dashboard from './Dashboard';
 import TransactionPanel from './TransactionPanel';
-import SwapScale from './SwapScale';
 import SwapPanel from './SwapPanel';
 import SecurityPinPad from './SecurityPinPad';
 import TokenRain from './TokenRain';
@@ -136,12 +135,12 @@ export default function Scene() {
 
             {/* Main Dashboard */}
             <group position={[0, 2.4, -3]}>
-                <Dashboard account={account} isLocked={isLocked} isVaultSetup={isVaultSetup} onConnect={handleConnect} onLock={() => { lock(); setSelectedChain(null); setSwapFrom(null); setShowQR(false); setShowClipboard(false); }} onShowQR={() => setShowQR(!showQR)} onShowContracts={() => setShowClipboard(!showClipboard)} />
+                <Dashboard account={account} isLocked={isLocked} isVaultSetup={isVaultSetup} onConnect={handleConnect} onLock={() => { lock(); setSelectedChain(null); setSwapFrom(null); setShowQR(false); setShowClipboard(false); }} onShowQR={() => setShowQR(!showQR)} onShowContracts={() => setShowClipboard(!showClipboard)} onSwap={() => (isLocked ? handleConnect() : setSwapFrom(''))} />
             </group>
 
             {/* Environment Selector */}
             {!showPinPad && !showSecureInfo && !selectedToken && !swapOpen && (
-                <group position={[0, 0.5, -2.5]}>
+                <group position={[0, 0.15, -2.6]}>
                     <EnvironmentSelector current={env} onSelect={setEnv} />
                 </group>
             )}
@@ -169,16 +168,6 @@ export default function Scene() {
                         title="NEW VAULT SEED"
                         content={secureContent}
                         onClose={() => setShowSecureInfo(false)}
-                    />
-                </group>
-            )}
-
-            {/* Swap Scale */}
-            {!showPinPad && !showSecureInfo && !selectedToken && !swapOpen && (
-                <group position={[0, 1.2, -1.5]}>
-                    <SwapScale
-                        disabled={isLocked}
-                        onActivate={() => (isLocked ? handleConnect() : setSwapFrom(''))}
                     />
                 </group>
             )}
